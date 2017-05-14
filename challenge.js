@@ -5,7 +5,21 @@
 /**
  * Some utility functions that may or may not be useful.
  * Feel free to modify these.
+ * 
+ * 
+ * 
+ * The original code is only working on Facebook because it used id selector * while username field, password field and submit button have different     * implementation across target website.
+ *  1. add helper function to detect the selection exist and unique
+ *  2. manually match filed based on the implementation on each site, and   *  only return if a unique field are matched
+ *
+ *  Note: it’s currently working on all target website. Yahoo.com has two 
+ *  step for auth, so it may need user to click detect field twice, but
+ *  credentials was preserved on the second step. Citi.com used mask on
+ *  input, and detect field only work after user focused on username field.
+ *  So I focus on username input field for citi.com
+ * 
  */
+
 $.fn.existAndUnique = function () {
     return this.length === 1;
 }
@@ -18,7 +32,8 @@ function getUsernameField() {
   usernameField = usernameField.existAndUnique() ? usernameField : $('input[type=text][name=email]');
   usernameField = usernameField.existAndUnique() ? usernameField : $('input[type=text][name=username]');
   usernameField = usernameField.existAndUnique() ? usernameField : $('input[type=text][name=onlineId1]');
-  usernameField = usernameField.existAndUnique() ? usernameField : $('#usernameMasked');
+  let inputMask = $('input.userMask[type=text]');
+  if(inputMask.existAndUnique()) inputMask.focus();
   return usernameField;
 }
 
