@@ -6,20 +6,42 @@
  * Some utility functions that may or may not be useful.
  * Feel free to modify these.
  */
+$.fn.existAndUnique = function () {
+    return this.length === 1;
+}
+
 function getUsernameField() {
-  return $("#email");
+  let usernameField = $('input[type=email]');
+  usernameField = usernameField.existAndUnique() ? usernameField : $('input[type=email]');
+  usernameField = usernameField.existAndUnique() ? usernameField : $('input[type=text]');
+  usernameField = usernameField.existAndUnique() ? usernameField : $('input[type=text][name=username]');
+  usernameField = usernameField.existAndUnique() ? usernameField : $('input[type=text][name=email]');
+  usernameField = usernameField.existAndUnique() ? usernameField : $('input[type=text][name=username]');
+  usernameField = usernameField.existAndUnique() ? usernameField : $('input[type=text][name=onlineId1]');
+  usernameField = usernameField.existAndUnique() ? usernameField : $('#usernameMasked');
+  return usernameField;
 }
 
 function getPasswordField() {
-  return $("#pass");
+  let passwordField = $('input[type=password]');
+  passwordField = passwordField.existAndUnique() ? passwordField : $('input[type=password][name=password]');
+  return passwordField;
 }
 
 function getFormField() {
-  return getUsernameField().closest('form');
+  let formField = getPasswordField().closest('form')
+  return formField;
 }
 
 function getSubmitButton() {
-  return $("#loginbutton");
+  let submitButton = $("button").filter(
+    function(){
+      return $(this).text() === 'Log in' || $(this).text() === 'Sign In'
+    }
+  );
+  submitButton = submitButton.existAndUnique()? submitButton : $('[type=submit]');
+  submitButton = submitButton.existAndUnique()? submitButton : $("#signInBtn");
+  return submitButton;
 }
 
 /**
